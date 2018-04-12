@@ -1,43 +1,49 @@
-pipeline { 
-  agent { 
-    node { 
+pipeline {
+  agent {
+    node {
       label 'React'
     }
+    
   }
   stages {
-    stage ('Checkout Code') {
+    stage('Checkout Code') {
       steps {
         checkout scm
       }
     }
-    stage ('Verify Tools'){
-      steps {
-        parallel (
-          node: { sh "npm -v" },
-          docker: { sh "docker -v" }
-        )
+    stage('Verify Tools') {
+      parallel {
+        stage('node') {
+          steps {
+            sh 'npm -v'
+          }
+        }
+        stage('docker') {
+          steps {
+            sh 'docker -v'
+          }
+        }
       }
     }
-    stage ('Build app') {
+    stage('Build app') {
       steps {
-        sh "npm prune"
-        sh "npm install"
+        sh 'echo "Hello World!"'
       }
     }
-    stage ('Test'){
+    stage('Test') {
       steps {
-        sh "npm test"
+        sh 'npm test'
       }
     }
-    stage ('Verify') {
+    stage('Verify') {
       steps {
-        input "Everything good?"
+        input 'Everything good?'
       }
     }
-    stage ('Clean') {
+    stage('Clean') {
       steps {
-        sh "npm prune"
-        sh "rm -rf node_modules"
+        sh 'npm prune'
+        sh 'rm -rf node_modules'
       }
     }
   }
