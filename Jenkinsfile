@@ -15,7 +15,7 @@ pipeline {
       parallel {
         stage('node') {
           steps {
-            sh 'npm -v'
+            sh 'echo $PATH'
           }
         }
         stage('docker') {
