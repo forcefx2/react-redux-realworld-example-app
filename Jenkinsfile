@@ -20,7 +20,7 @@ pipeline {
         }
         stage('docker') {
           steps {
-            sh 'docker -v'
+            sh 'echo $PATH'
           }
         }
       }
@@ -32,7 +32,7 @@ pipeline {
     }
     stage('Test') {
       steps {
-        sh 'npm test'
+        sh 'echo TEST'
       }
     }
     stage('Verify') {
