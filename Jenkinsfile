@@ -1,15 +1,47 @@
-pipeline {
-  agent any
+pipeline { 
+  agent { 
+    node { 
+      label 'React'
+    }
+  }
+  tools {
+    nodejs 'nodejs'
+  }
+ 
   stages {
-    stage('Git Repository') {
+    stage ('Checkout Code') {
       steps {
-        sh 'ls -ali'
+        checkout scm
       }
     }
-    stage('Build') {
+    stage ('Verify Tools'){
       steps {
-        sh '''npm install
-npm build'''
+        parallel (
+          node: { sh "npm -v" },
+          docker: { sh "docker -v" }
+        )
+      }
+    }
+    stage ('Build app') {
+      steps {
+        sh "npm prune"
+        sh "npm install"
+      }
+    }
+    stage ('Test'){
+      steps {
+        sh "npm test"
+      }
+    }
+    stage ('Verify') {
+      steps {
+        input "Everything good?"
+      }
+    }
+    stage ('Clean') {
+      steps {
+        sh "npm prune"
+        sh "rm -rf node_modules"
       }
     }
   }
