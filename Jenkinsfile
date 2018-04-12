@@ -4,10 +4,6 @@ pipeline {
       label 'React'
     }
   }
-  tools {
-    nodejs 'nodejs'
-  }
- 
   stages {
     stage ('Checkout Code') {
       steps {
